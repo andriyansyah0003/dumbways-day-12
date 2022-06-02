@@ -49,8 +49,6 @@ app.get("/", (req, res) => {
       ORDER BY tb_projects.id DESC`;
     }
 
-    console.log(query);
-
     client.query(query, function (err, result) {
       if (err) throw err;
 
@@ -68,8 +66,6 @@ app.get("/", (req, res) => {
           : "/public/img/cover.png";
         return project;
       });
-
-      console.log(newProject);
 
       res.render("index", {
         isLogin: req.session.isLogin,
@@ -123,8 +119,8 @@ app.post("/add-project", upload.single("image"), (req, res) => {
   db.connect(function (err, client, done) {
     if (err) throw err;
 
-    const query = `INSERT INTO tb_projects(project_name,start_date, end_date,description, author_id, image) 
-                    VALUES('${project_name}','${start_date}', '${end_date}','${description}',${userId}, '${fileName}');`;
+    const query = `INSERT INTO tb_projects(project_name,start_date, end_date,description, author_id,technologies, image) 
+                    VALUES('${project_name}','${start_date}', '${end_date}','${description}',${userId},ARRAY ['${technologies[0]}','${technologies[1]}','${technologies[2]}','${technologies[3]}'], '${fileName}');`;
 
     client.query(query, function (err, result) {
       if (err) throw err;
@@ -158,8 +154,6 @@ app.get("/project-detail/:id", (req, res) => {
       project["start_date"] = converTime(project["start_date"]);
       project["end_date"] = converTime(project["end_date"]);
 
-      console.log(project);
-
       res.render("project-detail", { project });
     });
     done();
@@ -182,13 +176,10 @@ app.get("/edit-project/:id", (req, res) => {
       if (err) throw err;
 
       const project = result.rows[0];
-      project.startdate = formattedTime(project.start_date);
-      project.enddate = formattedTime(project.end_date);
       project.image = project.image
         ? "/uploads/" + project.image
-        : "/public/assets/project-img.jpg";
+        : "/public/img/cover.jpg";
 
-      console.log(project);
       res.render("edit-project", {
         project,
         id,
@@ -196,37 +187,35 @@ app.get("/edit-project/:id", (req, res) => {
         user: req.session.user,
       });
     });
-
     done();
   });
 });
 
 app.post("/edit-project/:id", upload.single("image"), (req, res) => {
   id = req.params.id;
-  const name = req.body.name;
+  const project_name = req.body.project_name;
   const start_date = req.body.startDate;
   const end_date = req.body.endDate;
   const description = req.body.description;
-  const userId = req.session.user.id;
-  const fileName = req.file.filename;
   const technologies = [];
-  if (req.body.html) {
-    technologies.push("html");
+
+  if (req.body.nodeJs) {
+    technologies.push("nodeJs");
   } else {
     technologies.push("");
   }
-  if (req.body.javascript) {
-    technologies.push("javascript");
+  if (req.body.reactJs) {
+    technologies.push("reactJs");
   } else {
     technologies.push("");
   }
-  if (req.body.css) {
-    technologies.push("css");
+  if (req.body.nextJs) {
+    technologies.push("nextJs");
   } else {
     technologies.push("");
   }
-  if (req.body.php) {
-    technologies.push("php");
+  if (req.body.typeScript) {
+    technologies.push("typeScript");
   } else {
     technologies.push("");
   }
@@ -234,7 +223,7 @@ app.post("/edit-project/:id", upload.single("image"), (req, res) => {
   db.connect(function (err, client, done) {
     if (err) throw err;
 
-    const query = `UPDATE tb_projects SET name='${name}',start_date='${start_date}',end_date='${end_date}',description='${description}',technologies=ARRAY ['${technologies[0]}','${technologies[1]}','${technologies[2]}','${technologies[3]}'],image='${fileName}',user_id='${userId}' WHERE id='${id}';`;
+    const query = `UPDATE tb_projects SET project_name='${project_name}',start_date='${start_date}',end_date='${end_date}',description='${description}',technologies=ARRAY ['${technologies[0]}','${technologies[1]}','${technologies[2]}','${technologies[3]}'] WHERE id='${id}';`;
 
     client.query(query, function (err, result) {
       if (err) throw err;

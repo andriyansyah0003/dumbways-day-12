@@ -78,13 +78,13 @@
           <div class="col-lg-6 mx-auto">
             <form action="/edit-project/{{id}}" method="post">
               <div class="form-group">
-                <label class="my-lg-2" for="projectName">Project Name</label>
+                <label class="my-lg-2" for="project_name">Project Name</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="projectName"
-                  name="projectName"
-                  value="{{edit.project_name}}"
+                  id="project_name"
+                  name="project_name"
+                  value="{{project.project_name}}"
                   required
                 />
               </div>
@@ -96,7 +96,7 @@
                     id="startDate"
                     name="startDate"
                     class="form-control"
-                    value="{{edit.start_date}}"
+                    value="{{project.start-date}}"
                   />
                 </div>
                 <div class="col">
@@ -106,7 +106,7 @@
                     id="endDate"
                     name="endDate"
                     class="form-control"
-                    value="{{edit.end_date}}"
+                    value="{{project.end_date}}"
                   />
                 </div>
               </div>
@@ -119,7 +119,7 @@
                   rows="5"
                   placeholder="Enter your description"
                   required
-                >{{edit.description}}</textarea>
+                >{{project.description}}</textarea>
               </div>
               <div class="form-group">
                 <label class="my-lg-2" for="technologies">Technologies</label>
@@ -143,7 +143,7 @@
                         type="checkbox"
                         id="reactJs"
                         name="reactJs"
-                        {{#if edit.technologies.[1]}} checked {{/if}}
+                        {{#if project.technologies.[1]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="reactJs">
                         React JS
@@ -157,7 +157,7 @@
                         type="checkbox"
                         id="nextJs"
                         name="nextJs"
-                        {{#if edit.technologies.[2]}} checked {{/if}}
+                        {{#if project.technologies.[2]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="nextJs">
                         Next JS
@@ -169,7 +169,7 @@
                         type="checkbox"
                         id="typeScript"
                         name="typeScript"
-                        {{#if edit.technologies.[3]}} checked {{/if}}
+                        {{#if project.technologies.[3]}} checked {{/if}}
                       />
                       <label class="form-check-label" for="typeScript">
                         TypeScript
@@ -181,12 +181,12 @@
               <div class="form-group">
                 <div class="mb-3">
                   <label for="image" class="form-label my-lg-2">Upload Image</label>
-                  {{!-- <img src="/public/assets/{{ edit.image }}" alt=""> --}}
                   <input
                     class="form-control"
                     type="file"
                     id="image"
                     name="image"
+                    value="{{project.image}}"
                   />
                 </div>
               </div>
